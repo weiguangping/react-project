@@ -1,33 +1,28 @@
-import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
-import logins from "./pages/Login/";
-import home from "./pages/Home/";
-import Footer from "./components/Footer";
-import { withRouter } from "react-router-dom";
+import React from 'react';
+import {connect} from 'react-redux'
+import {login,logout,initAuth} from './reducer/Auth.redux'
+import { withRouter } from 'react-router-dom';
+import Root1 from './root1'
+import Root2 from './root2'
 class App extends React.Component {
-  componentWillMount() {
-    // console.log("111");
+  componentWillMount(){
+    // console.log('111');
     // console.log(this.props);
-  }
-  componentDidMount() {
+    
+    // this.props.initAuth()
   }
   render() {
-    let root = (
+    let root=this.props.isAuth?<Root2></Root2>:<Root1></Root1>
+    return (
       <React.Fragment>
-        <Switch>
-          <Route exact path="/" component={home} />
-          <Route exact path="/login" component={logins} />
-          <Redirect to="/" />
-        </Switch>
-        <Footer />
+        {root}
       </React.Fragment>
     );
-    return <React.Fragment>{root}</React.Fragment>;
   }
 }
-// const mapStatetoProps = state => {
-//   return state.auth;
-// };
-// const actionCreators = { login, logout, initAuth };
-// App = withRouter(connect(mapStatetoProps, actionCreators)(App));
-export default withRouter(App);
+const mapStatetoProps=(state)=>{
+  return state.auth
+}
+const actionCreators={login,logout,initAuth}
+App=withRouter(connect(mapStatetoProps, actionCreators)(App))
+export default App
